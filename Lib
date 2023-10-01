@@ -3562,6 +3562,7 @@ function library:Init(key)
     end
     --
     function TabLibrary:UpdateKeybind(new)
+        print("TryingToUpdateKeybind")
         new = new or key
         key = new
         return TabLibrary
