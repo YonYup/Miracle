@@ -750,8 +750,8 @@ function library:Introduction()
     xsxLogo.BackgroundTransparency = 1.000
     xsxLogo.Position = UDim2.new(0.5, 0, 0.5, 0)
     xsxLogo.Visible = true
-    xsxLogo.Image = "http://www.roblox.com/asset/?id=14402327350"
-    xsxLogo.Size = UDim2.new(0, 150, 0, 150)
+    xsxLogo.Image = "http://www.roblox.com/asset/?id=14944540856"
+    xsxLogo.Size = UDim2.new(0, 250, 0, 250)
     xsxLogo.ImageColor3 = Color3.fromRGB(255, 255, 255)
     xsxLogo.ImageTransparency = 1
     
@@ -761,9 +761,9 @@ function library:Introduction()
     hashLogo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     hashLogo.BackgroundTransparency = 1.000
     hashLogo.Position = UDim2.new(0.5, 0, 0.5, 0)
-    hashLogo.Size = UDim2.new(0, 225, 0, 225)
+    hashLogo.Size = UDim2.new(0, 300, 0, 300)
     hashLogo.Visible = true
-    hashLogo.Image = "http://www.roblox.com/asset/?id=14402327350"
+    hashLogo.Image = "http://www.roblox.com/asset/?id=14944540856"
     hashLogo.ImageColor3 = Color3.fromRGB(255, 255, 255)
     hashLogo.ImageTransparency = 1
     
@@ -3562,7 +3562,6 @@ function library:Init(key)
     end
     --
     function TabLibrary:UpdateKeybind(new)
-        print("TryingToUpdateKeybind")
         new = new or key
         key = new
         return TabLibrary
