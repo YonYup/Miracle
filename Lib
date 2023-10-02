@@ -752,7 +752,7 @@ function library:Introduction()
     xsxLogo.Visible = true
     xsxLogo.Image = "http://www.roblox.com/asset/?id=14944540838"
     xsxLogo.Size = UDim2.new(0, 250, 0, 250)
-    xsxLogo.ImageColor3 = Color3.fromRGB(255, 255, 255)
+    xsxLogo.ImageColor3 = Color3.fromRGB(159, 115, 255)
     xsxLogo.ImageTransparency = 1
     
     hashLogo.Name = "hashLogo"
@@ -764,7 +764,7 @@ function library:Introduction()
     hashLogo.Size = UDim2.new(0, 300, 0, 300)
     hashLogo.Visible = true
     hashLogo.Image = "http://www.roblox.com/asset/?id=14944540838"
-    hashLogo.ImageColor3 = Color3.fromRGB(255, 255, 255)
+    hashLogo.ImageColor3 = Color3.fromRGB(159, 115, 255)
     hashLogo.ImageTransparency = 1
     
     xsx.Name = "Yon"
