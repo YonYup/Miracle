@@ -1085,10 +1085,10 @@ function library:Init(key)
 
             for i,v in pairs(tabButtons:GetChildren()) do
                 if v:IsA("TextButton") then
-                    TweenService:Create(v, TweenTable["tab_text_colour"], {TextColor3 = Color3.fromRGB(170, 170, 170)}):Play()
+                    TweenService:Create(v, TweenTable["tab_text_colour"], {TextColor3 = Color3.fromRGB(170, 170, 170), BorderSizePixel = 0, BorderColor3 = Color3.fromRGB(0, 0, 0)}):Play()
                 end
             end
-            TweenService:Create(tabButton, TweenTable["tab_text_colour"], {TextColor3 = Color3.fromRGB(159, 115, 255)}):Play()
+            TweenService:Create(tabButton, TweenTable["tab_text_colour"], {TextColor3 = Color3.fromRGB(159, 115, 255), BorderSizePixel = 2, BorderColor3 = Color3.fromRGB(159, 115, 255)}):Play()
         end)
 
         local function UpdatePageSize()
