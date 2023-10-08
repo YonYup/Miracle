@@ -1,4 +1,4 @@
--- / Locals nig
+-- / Locals new yondothing
 local Workspace = game:GetService("Workspace")
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
@@ -3566,6 +3566,12 @@ function library:Init(key)
         key = new
         return TabLibrary
     end
+
+    function TabLibrary:YonDoThing(new)
+        edge.Visible = not edge.Visible
+        return TabLibrary
+    end
+
     return TabLibrary
 end
 return library
