@@ -1071,6 +1071,9 @@ function library:Init(key)
         if TabLibrary.IsFirst then
             page.Visible = true
             tabButton.TextColor3 = Color3.fromRGB(159, 115, 255)
+            tabButton.BorderSizePixel = 2
+            tabButton.BorderColor3 = Color3.fromRGB(159, 115, 255)
+            tabButton.BackgroundTransparency = .65
             TabLibrary.CurrentTab = title
         end
         
