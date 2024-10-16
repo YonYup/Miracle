@@ -1,5 +1,3 @@
-SX_VM_CNONE();
-
 local Services = sharedRequire('./Services.lua');
 local library = sharedRequire('../UILibrary.lua');
 local Signal = sharedRequire('./Signal.lua');
