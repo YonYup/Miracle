@@ -74,7 +74,7 @@ local Library = {
     Scheme = {
         BackgroundColor = Color3.fromRGB(15, 15, 15),
         MainColor = Color3.fromRGB(25, 25, 25),
-        AccentColor = Color3.fromRGB(100, 54, 172),
+        AccentColor = Color3.fromRGB(125, 85, 255),
         OutlineColor = Color3.fromRGB(40, 40, 40),
         FontColor = Color3.new(1, 1, 1),
         Font = Font.fromEnum(Enum.Font.Code),
@@ -4247,6 +4247,7 @@ function Library:CreateWindow(WindowInfo)
         local WarningBox
         local WarningTitle
         local WarningText
+        local WarningStroke
 
         Icon = Library:GetIcon(Icon)
         do
@@ -4382,7 +4383,7 @@ function Library:CreateWindow(WindowInfo)
                 TextXAlignment = Enum.TextXAlignment.Left,
                 Parent = WarningBox,
             })
-            New("UIStroke", {
+            WarningStroke = New("UIStroke", {
                 ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
                 Color = Color3.fromRGB(169, 0, 0),
                 LineJoinMode = Enum.LineJoinMode.Miter,
@@ -4439,6 +4440,31 @@ function Library:CreateWindow(WindowInfo)
                 WarningText.Text = Info.Text
                 Library:UpdateDPI(WarningText, { Size = WarningText.Size })
                 Tab:Resize()
+            end
+
+            WarningBox.BackgroundColor3 = Info.IsNormal == true and Library.Scheme.BackgroundColor or Color3.fromRGB(127, 0, 0)
+            WarningBox.BorderColor3 = Info.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(255, 50, 50)
+            WarningTitle.TextColor3 = Info.IsNormal == true and Library.Scheme.FontColor or Color3.fromRGB(255, 50, 50)
+            WarningStroke.Color = Info.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(169, 0, 0)
+
+            if not Library.Registry[WarningBox] then Library:AddToRegistry(WarningBox, {}) end
+            if not Library.Registry[WarningTitle] then Library:AddToRegistry(WarningTitle, {}) end
+            if not Library.Registry[WarningStroke] then Library:AddToRegistry(WarningStroke, {}) end
+
+            Library.Registry[WarningBox].BackgroundColor3 = function()
+                return Info.IsNormal == true and Library.Scheme.BackgroundColor or Color3.fromRGB(127, 0, 0)
+            end
+
+            Library.Registry[WarningBox].BorderColor3 = function()
+                return Info.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(255, 50, 50)
+            end
+
+            Library.Registry[WarningTitle].TextColor3 = function()
+                return Info.IsNormal == true and Library.Scheme.FontColor or Color3.fromRGB(255, 50, 50)
+            end
+
+            Library.Registry[WarningStroke].Color = function()
+                return Info.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(169, 0, 0)
             end
         end
 
@@ -5250,76 +5276,3 @@ Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
 
 getgenv().Library = Library
 return Library
-
--- [[ Enhancements Added by ChatGPT ]] --
-
--- Add UI sounds
-local UISound = Instance.new("Sound", SoundService)
-UISound.SoundId = "rbxassetid://6026984224"
-UISound.Volume = 0.3
-
-local function PlayUISound()
-    if UISound.IsLoaded then
-        UISound:Play()
-    else
-        UISound.Loaded:Connect(function()
-            UISound:Play()
-        end)
-    end
-end
-
--- Animate Hover for Buttons
-local function AnimateHover(button)
-    local defaultColor = Library.Scheme.MainColor
-    local hoverColor = Library:GetBetterColor(defaultColor, 10)
-    button.MouseEnter:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
-        PlayUISound()
-    end)
-    button.MouseLeave:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = defaultColor}):Play()
-    end)
-end
-
--- Add Blur Effect on Modal Open
-local function AddBlur()
-    local blur = Instance.new("BlurEffect", game:GetService("Lighting"))
-    blur.Name = "UILibraryBlur"
-    blur.Size = 10
-end
-
-local function RemoveBlur()
-    local blur = game:GetService("Lighting"):FindFirstChild("UILibraryBlur")
-    if blur then blur:Destroy() end
-end
-
--- Theme Toggle (Light/Dark)
-function Library:ToggleTheme()
-    Library.IsLightTheme = not Library.IsLightTheme
-    if Library.IsLightTheme then
-        Library.Scheme = {
-            BackgroundColor = Color3.fromRGB(245, 245, 245),
-            MainColor = Color3.fromRGB(220, 220, 220),
-            AccentColor = Color3.fromRGB(100, 54, 172),
-            OutlineColor = Color3.fromRGB(200, 200, 200),
-            FontColor = Color3.new(0.1, 0.1, 0.1),
-            Font = Font.fromEnum(Enum.Font.Code),
-            Red = Color3.fromRGB(255, 50, 50),
-            Dark = Color3.new(0.2, 0.2, 0.2),
-            White = Color3.new(1, 1, 1),
-        }
-    else
-        Library.Scheme = {
-            BackgroundColor = Color3.fromRGB(15, 15, 15),
-            MainColor = Color3.fromRGB(25, 25, 25),
-            AccentColor = Color3.fromRGB(100, 54, 172),
-            OutlineColor = Color3.fromRGB(40, 40, 40),
-            FontColor = Color3.new(1, 1, 1),
-            Font = Font.fromEnum(Enum.Font.Code),
-            Red = Color3.fromRGB(255, 50, 50),
-            Dark = Color3.new(0, 0, 0),
-            White = Color3.new(1, 1, 1),
-        }
-    end
-    Library:UpdateColorsUsingRegistry()
-end
