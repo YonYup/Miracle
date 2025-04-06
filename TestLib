@@ -1,0 +1,209 @@
+-- AwesomeUI.lua
+
+local AwesomeUI = {}
+
+-- Built-in default values & styles.
+AwesomeUI.BUILTIN = {
+  DEFAULT_BUTTON_STYLE = {
+    backgroundColor = "#008CBA",
+    color = "#fff",
+    padding = "10px 20px",
+    border = "none",
+    borderRadius = "4px"
+  },
+  DEFAULT_INPUT_STYLE = {
+    padding = "8px",
+    border = "1px solid #ccc",
+    borderRadius = "4px"
+  },
+  DEFAULT_MODAL_STYLE = {
+    backgroundColor = "#fff",
+    padding = "20px",
+    borderRadius = "5px",
+    width = "400px",
+    margin = "auto",
+    marginTop = "100px"
+  },
+  DEFAULT_NOTIFICATION_STYLE = {
+    position = "fixed",
+    top = "10px",
+    right = "10px",
+    backgroundColor = "#2196F3",
+    color = "#fff",
+    padding = "10px",
+    borderRadius = "5px"
+  }
+}
+
+-- Utility function to merge default styles with custom styles.
+local function mergeStyles(defaultStyle, customStyle)
+  local result = {}
+  for k, v in pairs(defaultStyle) do result[k] = v end
+  if customStyle then
+    for k, v in pairs(customStyle) do result[k] = v end
+  end
+  return result
+end
+
+-- Helper: Creates a new UI element (as a table).
+function AwesomeUI.createElement(type, options)
+  local element = {
+    type = type,
+    className = options.className or "",
+    innerHTML = options.innerHTML or "",
+    attributes = options.attributes or {},
+    style = options.style or {},
+    events = options.events or {},
+    children = {},
+    visible = true
+  }
+  return element
+end
+
+-- Built-in functions for alert, confirm, and prompt.
+function AwesomeUI.alert(message)
+  print("[ALERT]: " .. message)
+end
+
+function AwesomeUI.confirm(message)
+  print("[CONFIRM]: " .. message .. " (Y/N)?")
+  local answer = io.read()
+  return answer:lower() == "y"
+end
+
+function AwesomeUI.prompt(message)
+  print("[PROMPT]: " .. message)
+  return io.read()
+end
+
+-- Create a button element.
+function AwesomeUI.createButton(text, onClick, options)
+  options = options or {}
+  options.innerHTML = text
+  options.events = options.events or {}
+  options.events.click = onClick
+  options.style = mergeStyles(AwesomeUI.BUILTIN.DEFAULT_BUTTON_STYLE, options.style)
+  return AwesomeUI.createElement("button", options)
+end
+
+-- Create an input element.
+function AwesomeUI.createInput(inputType, options)
+  options = options or {}
+  options.attributes = options.attributes or {}
+  options.attributes.type = inputType or "text"
+  options.style = mergeStyles(AwesomeUI.BUILTIN.DEFAULT_INPUT_STYLE, options.style)
+  return AwesomeUI.createElement("input", options)
+end
+
+-- Create a checkbox element.
+function AwesomeUI.createCheckbox(label, onChange, options)
+  options = options or {}
+  local checkbox = AwesomeUI.createElement("checkbox", options)
+  checkbox.attributes = checkbox.attributes or {}
+  checkbox.attributes.type = "checkbox"
+  checkbox.label = label or ""
+  checkbox.events.change = onChange
+  return checkbox
+end
+
+-- Create a slider element.
+function AwesomeUI.createSlider(min, max, value, onChange, options)
+  options = options or {}
+  options.attributes = options.attributes or {}
+  options.attributes.type = "range"
+  options.attributes.min = tostring(min)
+  options.attributes.max = tostring(max)
+  options.attributes.value = tostring(value or min)
+  options.events = options.events or {}
+  options.events.change = onChange
+  return AwesomeUI.createElement("slider", options)
+end
+
+-- Create a modal overlay with a container.
+function AwesomeUI.createModal(title, content, options)
+  options = options or {}
+  -- Modal overlay simulated as a container.
+  local overlay = AwesomeUI.createElement("modalOverlay", {
+    style = {
+      position = "fixed",
+      top = 0,
+      left = 0,
+      width = "100%",
+      height = "100%",
+      backgroundColor = "rgba(0,0,0,0.5)"
+    }
+  })
+
+  -- Modal container.
+  local modal = AwesomeUI.createElement("modal", {
+    style = mergeStyles(AwesomeUI.BUILTIN.DEFAULT_MODAL_STYLE, options.style)
+  })
+
+  -- Title element.
+  local modalTitle = AwesomeUI.createElement("title", { innerHTML = title })
+  -- Content element.
+  local modalContent = AwesomeUI.createElement("content", { innerHTML = content })
+  -- Close button.
+  local closeButton = AwesomeUI.createButton("Close", function()
+    overlay.visible = false
+    if options.onClose then options.onClose() end
+    print("Modal closed!")
+  end)
+
+  modal.children = { modalTitle, modalContent, closeButton }
+  overlay.children = { modal }
+  return overlay
+end
+
+-- Function to "display" the modal (simulate by printing its state).
+function AwesomeUI.showModal(modalElement)
+  modalElement.visible = true
+  print("Modal shown with title: " .. (modalElement.children[1] and modalElement.children[1].innerHTML or ""))
+  -- In a real system, modalElement would be added to your rendering tree.
+end
+
+-- Create an image element.
+function AwesomeUI.createImage(src, options)
+  options = options or {}
+  options.attributes = options.attributes or {}
+  options.attributes.src = src
+  return AwesomeUI.createElement("image", options)
+end
+
+-- Create a dropdown (select) element.
+function AwesomeUI.createDropdown(options)
+  options = options or {}
+  local dropdown = AwesomeUI.createElement("dropdown", options)
+  dropdown.items = options.items or {}  -- Expect a list of {label, value} pairs.
+  dropdown.onChange = options.onChange
+  return dropdown
+end
+
+-- Create a tabs component.
+function AwesomeUI.createTabs(tabItems, options)
+  options = options or {}
+  local tabs = AwesomeUI.createElement("tabs", options)
+  tabs.items = tabItems or {}  -- Expect a list of { title = "Tab", content = "..." }.
+  tabs.activeTab = 1
+  return tabs
+end
+
+-- Create a notification element.
+function AwesomeUI.createNotification(message, options)
+  options = options or {}
+  options.innerHTML = message
+  options.style = mergeStyles(AwesomeUI.BUILTIN.DEFAULT_NOTIFICATION_STYLE, options.style)
+  return AwesomeUI.createElement("notification", options)
+end
+
+-- Function to display a notification that auto-hides after a duration.
+function AwesomeUI.showNotification(message, options)
+  local notification = AwesomeUI.createNotification(message, options)
+  notification.visible = true
+  print("Notification: " .. message)
+  local duration = (options and options.duration) or 3000
+  print("This notification will disappear in " .. duration .. " ms")
+  return notification
+end
+
+return AwesomeUI
